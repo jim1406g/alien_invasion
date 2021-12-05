@@ -99,11 +99,16 @@ class AlienInvasion:
 
     def _update_bullets(self):
         """Обновляет позиции снарядов, удаляет старые снаряды."""
+
         self.bullets.update()
+
         # Удаление снарядов за краем
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
+
+        # Обработка попаданий
+        collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
 
     def _update_aliens(self):
         """Обновляет позиции всех пришельцев во флоте."""
