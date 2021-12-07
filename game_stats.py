@@ -4,6 +4,7 @@ class GameStats():
     def __init__(self, ai_game):
         """Инициирует статистику."""
         self.settings = ai_game.settings
+        self.game_active = True
         self.reset_stats()
 
     def reset_stats(self):
