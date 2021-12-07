@@ -12,6 +12,7 @@ class Settings():
 
         # Настройки корабля
         self.ship_speed = 8.5
+        self.ship_limit = 3
 
         # Параметры снарядов
         self.bullet_speed = 15.5
