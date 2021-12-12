@@ -130,6 +130,7 @@ class AlienInvasion:
         if not self.aliens:
             self.bullets.empty()
             self._create_fleet()
+            self.settings.increase_speed()
 
     def _update_aliens(self):
         """Обновляет позиции всех пришельцев во флоте."""
@@ -177,6 +178,7 @@ class AlienInvasion:
         self.bullets.empty()
         self._create_fleet()
         self.ship.center_ship()
+        self.settings.initialize_dynemic_settings()
 
     def _update_screen(self):
         """Обновляет изображения на экране, отображает новый экран."""
