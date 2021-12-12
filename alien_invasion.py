@@ -88,6 +88,7 @@ class AlienInvasion:
             self.stats.reset_stats()
             self._reset_round()
             self.stats.game_active = True
+            pygame.mouse.set_visible(False)
 
     def _check_keydown_events(self, event):
         """Реагирует на нажатие клавиш."""
@@ -168,6 +169,7 @@ class AlienInvasion:
             sleep(0.5)
         else:
             self.stats.game_active = False
+            pygame.mouse.set_visible(True)
 
     def _reset_round(self):
         """Готовит начало нового раунда."""
