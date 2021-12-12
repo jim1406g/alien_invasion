@@ -85,6 +85,8 @@ class AlienInvasion:
     def _check_play_button(self, mouse_pos):
         """Запускает новую игру при нажатии на play."""
         if self.play_button.rect.collidepoint(mouse_pos):
+            self.stats.reset_stats()
+            self._reset_round()
             self.stats.game_active = True
 
     def _check_keydown_events(self, event):
@@ -162,13 +164,17 @@ class AlienInvasion:
         """Обрабатывает потерю корабля."""
         if self.stats.ships_left > 1:
             self.stats.ships_left -= 1
-            self.aliens.empty()
-            self.bullets.empty()
-            self._create_fleet()
-            self.ship.center_ship()
+            self._reset_round()
             sleep(0.5)
         else:
             self.stats.game_active = False
+
+    def _reset_round(self):
+        """Готовит начало нового раунда."""
+        self.aliens.empty()
+        self.bullets.empty()
+        self._create_fleet()
+        self.ship.center_ship()
 
     def _update_screen(self):
         """Обновляет изображения на экране, отображает новый экран."""
