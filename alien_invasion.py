@@ -90,6 +90,7 @@ class AlienInvasion:
             self.stats.reset_stats()
             self._reset_round()
             self.stats.game_active = True
+            self.sb.prep_score()
             pygame.mouse.set_visible(False)
 
     def _check_keydown_events(self, event):
@@ -128,6 +129,11 @@ class AlienInvasion:
     def _check_bullet_alien_collisions(self):
         """Обработка коллизий снарядов с пришельцами."""
         collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+
+        if collisions:
+            self.stats.score += self.settings.alien_points
+            self.sb.prep_score()
+
         # Создание нового флота пришельцев, перед этим уничтожаются все снаряды
         if not self.aliens:
             self.bullets.empty()
@@ -180,7 +186,7 @@ class AlienInvasion:
         self.bullets.empty()
         self._create_fleet()
         self.ship.center_ship()
-        self.settings.initialize_dynemic_settings()
+        self.settings.initialize_dynamic_settings()
 
     def _update_screen(self):
         """Обновляет изображения на экране, отображает новый экран."""
