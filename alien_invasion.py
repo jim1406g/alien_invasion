@@ -32,7 +32,7 @@ class AlienInvasion:
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
-        self.play_button = Button(self, "Play")
+        self.play_button = Button(self, "(P)lay")
 
     def _create_fleet(self):
         """Создает флот вторжения."""
@@ -86,7 +86,12 @@ class AlienInvasion:
 
     def _check_play_button(self, mouse_pos):
         """Запускает новую игру при нажатии на play."""
-        if self.play_button.rect.collidepoint(mouse_pos) and not self.stats.game_active:
+        if self.play_button.rect.collidepoint(mouse_pos):
+            self._click_play_button()
+
+    def _click_play_button(self):
+        """Реакция на нажатие play."""
+        if not self.stats.game_active:
             self.stats.reset_stats()
             self._reset_round()
             self.stats.game_active = True
@@ -103,6 +108,8 @@ class AlienInvasion:
             sys.exit()
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
+        elif event.key == pygame.K_p:
+            self._click_play_button()
 
     def _check_keyup_events(self, event):
         """Реагирует на отпускание клавиш."""
