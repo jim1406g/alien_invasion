@@ -17,6 +17,7 @@ class Scoreboard():
         # Подготовка исходного изображения
         self.prep_score()
         self.prep_high_score()
+        self.prep_exit_text()
 
     def prep_score(self):
         """Преобразует текущий счет в графическое изображение."""
@@ -40,10 +41,21 @@ class Scoreboard():
         self.high_score_rect.centerx = self.screen_rect.centerx
         self.high_score_rect.top = self.score_rect.top
 
+    def prep_exit_text(self):
+        """Готовит информационный текст о способе выхода из игры."""
+        exit_text_str = "Q - exit"
+        self.exit_text_image = self.font.render(exit_text_str, True, self.text_color, self.settings.bg_color)
+
+        # Вывод в левой верхней части экрана
+        self.exit_text_rect = self.exit_text_image.get_rect()
+        self.exit_text_rect.left = self.screen_rect.left + 20
+        self.exit_text_rect.top = self.score_rect.top
+
     def show_score(self):
         """Выводит счет на экран."""
         self.screen.blit(self.score_image, self.score_rect)
         self.screen.blit(self.high_score_image, self.high_score_rect)
+        self.screen.blit(self.exit_text_image, self.exit_text_rect)
 
     def check_high_score(self):
         """Проверяет появление рекорда."""
