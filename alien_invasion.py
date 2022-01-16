@@ -1,6 +1,7 @@
 import sys
 import pygame
 from time import sleep
+import json
 
 from settings import Settings
 from ship import Ship
@@ -27,6 +28,8 @@ class AlienInvasion:
                 (self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Alien Invasion")
         self.stats = GameStats(self)
+        self.records_filename = 'records.json'
+        self._load_records()
         self.sb = Scoreboard(self)
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
@@ -75,6 +78,7 @@ class AlienInvasion:
         """Обрабатывает нажатия клавиш и события мыши."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                self._save_records()
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_events(event)
@@ -107,6 +111,7 @@ class AlienInvasion:
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = True
         elif event.key == pygame.K_q:
+            self._save_records()
             sys.exit()
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
@@ -216,6 +221,22 @@ class AlienInvasion:
             self.play_button.draw_button()
         # Отображение последнего прорисованного экрана
         pygame.display.flip()
+
+    def _load_records(self):
+        """Загружает рекорды из файла."""
+        try:
+            with open(self.records_filename, 'r') as f:
+                self.stats.high_score = json.load(f)
+        except FileNotFoundError:
+            pass
+
+    def _save_records(self):
+        """Сохраняет рекорды в файл."""
+        try:
+            with open(self.records_filename, 'w') as f:
+                json.dump(self.stats.high_score, f)
+        except:
+            pass
 
 
 if __name__ == '__main__':
