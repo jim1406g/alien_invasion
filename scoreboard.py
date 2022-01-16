@@ -1,4 +1,7 @@
 import pygame.font
+from pygame.sprite import Group
+
+from ship import Ship
 
 
 class Scoreboard():
@@ -6,6 +9,7 @@ class Scoreboard():
 
     def __init__(self, ai_game):
         """Инициализирует атрибуты подсчета очков."""
+        self.ai_game = ai_game
         self.screen = ai_game.screen
         self.screen_rect = ai_game.screen.get_rect()
         self.settings = ai_game.settings
@@ -17,8 +21,9 @@ class Scoreboard():
         # Подготовка исходного изображения
         self.prep_score()
         self.prep_high_score()
-        self.prep_exit_text()
         self.prep_level()
+        self.prep_ships()
+        self.prep_exit_text()
 
     def prep_score(self):
         """Преобразует текущий счет в графическое изображение."""
@@ -42,16 +47,6 @@ class Scoreboard():
         self.high_score_rect.centerx = self.screen_rect.centerx
         self.high_score_rect.top = self.score_rect.top
 
-    def prep_exit_text(self):
-        """Готовит информационный текст о способе выхода из игры."""
-        exit_text_str = "Q - exit"
-        self.exit_text_image = self.font.render(exit_text_str, True, self.text_color, self.settings.bg_color)
-
-        # Вывод в левой верхней части экрана
-        self.exit_text_rect = self.exit_text_image.get_rect()
-        self.exit_text_rect.left = self.screen_rect.left + 20
-        self.exit_text_rect.top = self.score_rect.top
-
     def prep_level(self):
         """Преобразует текущий уровень в графическое изображение."""
         level_str = str(self.stats.level)
@@ -62,12 +57,32 @@ class Scoreboard():
         self.level_rect.right = self.score_rect.right
         self.level_rect.top = self.score_rect.bottom + 10
 
+    def prep_ships(self):
+        """Сообщает количество оставшихся кораблей."""
+        self.ships = Group()
+        for ship_number in range(self.stats.ships_left):
+            ship = Ship(self.ai_game)
+            ship.rect.x = 10 + ship_number * (ship.rect.width + 10)
+            ship.rect.y = 10
+            self.ships.add(ship)
+
+    def prep_exit_text(self):
+        """Готовит информационный текст о способе выхода из игры."""
+        exit_text_str = "Q - exit"
+        self.exit_text_image = self.font.render(exit_text_str, True, self.text_color, self.settings.bg_color)
+
+        # Вывод в левой верхней части экрана
+        self.exit_text_rect = self.exit_text_image.get_rect()
+        self.exit_text_rect.left = self.screen_rect.left + 20
+        self.exit_text_rect.top = Ship(self.ai_game).rect.height + 20
+
     def show_score(self):
         """Выводит счет на экран."""
         self.screen.blit(self.score_image, self.score_rect)
         self.screen.blit(self.high_score_image, self.high_score_rect)
-        self.screen.blit(self.exit_text_image, self.exit_text_rect)
         self.screen.blit(self.level_image, self.level_rect)
+        self.ships.draw(self.screen)
+        self.screen.blit(self.exit_text_image, self.exit_text_rect)
 
     def check_high_score(self):
         """Проверяет появление рекорда."""

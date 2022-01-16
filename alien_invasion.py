@@ -45,7 +45,7 @@ class AlienInvasion:
 
         # Количество рядов пришельцев
         ship_height = self.ship.rect.height
-        available_space_y = self.settings.screen_height - (5 * alien_height) - ship_height
+        available_space_y = self.settings.screen_height - (8 * alien_height) - ship_height
         number_rows = available_space_y // (2 * alien_height)
 
         for row_number in range(number_rows):
@@ -58,7 +58,7 @@ class AlienInvasion:
         alien_width, alien_height = alien.rect.size
         alien.x = alien_width + 2 * alien_width * alien_number
         alien.rect.x = alien.x
-        alien.rect.y = alien_height + 2 * alien_height * row_number
+        alien.rect.y = 3 * alien_height + 2 * alien_height * row_number
         self.aliens.add(alien)
 
     def run_game(self):
@@ -97,6 +97,7 @@ class AlienInvasion:
             self.stats.game_active = True
             self.sb.prep_score()
             self.sb.prep_level()
+            self.sb.prep_ships()
             pygame.mouse.set_visible(False)
 
     def _check_keydown_events(self, event):
@@ -188,6 +189,7 @@ class AlienInvasion:
         """Обрабатывает потерю корабля."""
         if self.stats.ships_left > 1:
             self.stats.ships_left -= 1
+            self.sb.prep_ships()
             self._reset_round()
             sleep(0.5)
         else:
