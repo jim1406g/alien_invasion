@@ -96,6 +96,7 @@ class AlienInvasion:
             self._reset_round()
             self.stats.game_active = True
             self.sb.prep_score()
+            self.sb.prep_level()
             pygame.mouse.set_visible(False)
 
     def _check_keydown_events(self, event):
@@ -143,11 +144,15 @@ class AlienInvasion:
             self.sb.prep_score()
             self.sb.check_high_score()
 
-        # Создание нового флота пришельцев, перед этим уничтожаются все снаряды
+        # Создание нового флота пришельцев,
+        # перед этим уничтожаются все снаряды и
+        # выполняются другие действия при переходе на уровень вверх
         if not self.aliens:
             self.bullets.empty()
             self._create_fleet()
             self.settings.increase_speed()
+            self.stats.level += 1
+            self.sb.prep_level()
 
     def _update_aliens(self):
         """Обновляет позиции всех пришельцев во флоте."""
